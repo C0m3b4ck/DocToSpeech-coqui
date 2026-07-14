@@ -1,5 +1,4 @@
-# DocToSpeech (Coqui)
-<img src=https://github.com/C0m3b4ck/DocToSpeech-coqui/blob/main/icon.png>
+# DocToSpeech (Coqui) <img src=https://github.com/C0m3b4ck/DocToSpeech-coqui/blob/main/icon.png>
 [![MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](LICENSE)
 [![Pinokio](https://img.shields.io/badge/Platform-Pinokio-FF6B35.svg?style=for-the-badge&logo=pinokio&logoColor=white)](https://pinokio.computer)
 
