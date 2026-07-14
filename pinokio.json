@@ -1,0 +1,8 @@
+{
+  "title": "DocToSpeech (Coqui)",
+  "description": "Fully offline document-to-speech converter using Coqui TTS models (XTTS v2, Bark, VITS, YourTTS) and StyleTTS 2. Converts EPUB, PDF, DOCX, HTML, and TXT files to audio with voice cloning support. No API keys or cloud services required.",
+  "icon": "icon.png",
+  "author": "C0m3b4ck",
+  "license": "MPL-2.0",
+  "repository": "https://github.com/C0m3b4ck/DocToSpeech-coqui"
+}

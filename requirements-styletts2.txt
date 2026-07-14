@@ -1,0 +1,11 @@
+# ========================= STYLETTS 2 (add-on for coqui venv) =========================
+# Install on top of requirements-coqui.txt in the same venv.
+#
+# Setup:
+#   source .venv/bin/activate
+#   pip install -r requirements-styletts2.txt
+
+styletts2==0.1.6
+
+# ========================= GRADIO WEB UI =========================
+gradio>=5.0.0

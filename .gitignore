@@ -1,0 +1,11 @@
+venv311/ venv311_tts/ pyttsx3/ samples/
+*.wav
+*.epub
+*.djvu
+*.pdf
+*.html
+*.doc
+*.docx
+*.pyc
+__pycache__/
+push-nocopy.sh
