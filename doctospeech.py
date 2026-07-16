@@ -201,7 +201,7 @@ def sanitize_with_ollama(txt_path, model="llama3.1", agent_prompt=None):
             },
         ]
 
-        response = ollama.chat(model=model, messages=messages)
+        response = ollama.chat(model=model, messages=messages, keep_alive=0)
         msg = response["message"]
         cleaned.append(msg.get("content", chunk))
 
@@ -244,7 +244,7 @@ def sanitize_text(text, model="llama3.1", agent_prompt=None):
                 ),
             },
         ]
-        response = ollama.chat(model=model, messages=messages)
+        response = ollama.chat(model=model, messages=messages, keep_alive=0)
         cleaned.append(response["message"].get("content", chunk))
 
     return "\n\n".join(cleaned)

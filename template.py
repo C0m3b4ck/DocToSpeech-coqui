@@ -109,7 +109,7 @@ def sanitize_text(text, model="llama3.1", agent_prompt=None, label="Sanitizing")
             },
         ]
 
-        response = ollama.chat(model=model, messages=messages)
+        response = ollama.chat(model=model, messages=messages, keep_alive=0)
         msg = response["message"]
         cleaned.append(msg.get("content", chunk))
 
