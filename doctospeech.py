@@ -631,6 +631,56 @@ def epub_to_text(doc_path, chapter_choice=None):
     return txt_files
 
 
+def _is_scanned_pdf(pdf):
+    """Check if a pdftotext.PDF object contains no meaningful text (image-only scans)."""
+    total_chars = sum(len(page.strip()) for page in pdf)
+    num_pages = len(pdf)
+    if num_pages == 0:
+        return True
+    avg_chars_per_page = total_chars / num_pages
+    return avg_chars_per_page < 50
+
+
+def pdf_to_text_ocr(doc_path, password=None):
+    """Extract text from a scanned/image-only PDF using OCR (pdf2image + pytesseract)."""
+    try:
+        from pdf2image import convert_from_path
+        import pytesseract
+    except ImportError as e:
+        raise ImportError(
+            f"OCR dependencies not installed: {e}\n"
+            "Install with: pip install pdf2image pytesseract\n"
+            "Also requires Tesseract binary: sudo apt install tesseract-ocr"
+        )
+
+    info("PDF appears to be a scanned document (no text layer). Using OCR...")
+    images = convert_from_path(doc_path, password=password or "")
+    info(f"Converted {C.BOLD}{len(images)}{C.RESET}{C.DIM} page(s) to images{C.RESET}")
+
+    pages = []
+    for i, img in enumerate(tqdm(images, desc="  OCR", bar_format="    {l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}]")):
+        text = pytesseract.image_to_string(img)
+        pages.append(text)
+        if i > 0:
+            pass  # handled during write
+
+    del images
+
+    txt_file = doc_path + ".txt"
+    try:
+        with open(txt_file, "w") as save_text:
+            for i, page in enumerate(pages):
+                if i > 0:
+                    save_text.write("\n\n")
+                save_text.write(page)
+    except Exception as e:
+        error(f"Failed to save txt: {e}")
+        raise
+
+    success(f"Saved: {txt_file} (OCR)")
+    return txt_file
+
+
 def pdf_to_text(doc_path):
     import pdftotext
     choice = ""
@@ -654,6 +704,11 @@ def pdf_to_text(doc_path):
         password = None
 
     info(f"PDF has {C.BOLD}{len(pdf)}{C.RESET}{C.DIM} page(s){C.RESET}")
+
+    if _is_scanned_pdf(pdf):
+        warn("No extractable text found — detected as scanned/image-only PDF")
+        del pdf
+        return pdf_to_text_ocr(doc_path, password=password)
 
     show = ""
     while show not in ("y", "n"):

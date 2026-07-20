@@ -151,7 +151,34 @@ def _extract_pdf(path):
         if i > 0:
             pages.append("\n\n")
         pages.append(page)
-    return "".join(pages)
+    text = "".join(pages)
+
+    total_chars = sum(len(p.strip()) for p in pdf)
+    num_pages = len(pdf)
+    del pdf
+    avg_chars = total_chars / num_pages if num_pages else 0
+    if avg_chars < 50:
+        return _extract_pdf_ocr(path)
+    return text
+
+
+def _extract_pdf_ocr(path):
+    try:
+        from pdf2image import convert_from_path
+        import pytesseract
+    except ImportError as e:
+        raise ImportError(
+            f"OCR dependencies not installed: {e}\n"
+            "Install with: pip install pdf2image pytesseract\n"
+            "Also requires Tesseract binary: sudo apt install tesseract-ocr"
+        )
+
+    images = convert_from_path(path)
+    pages = []
+    for img in images:
+        pages.append(pytesseract.image_to_string(img))
+    del images
+    return "\n\n".join(pages)
 
 
 def _extract_docx(path):
